@@ -5,7 +5,10 @@ import java.awt.event.*;
 
 /**
  * This program creates a five-pointed start every time the user
- * clicks the mouse on the canvas.
+ * clicks the mouse on the canvas. -- DEPRECATED --
+ * 
+ * NEW FUNCTIONALITY -- onClick displays mouse coordinates in a GLabel
+ * 
  * @author sachingoel
  */
 
