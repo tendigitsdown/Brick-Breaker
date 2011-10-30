@@ -68,12 +68,13 @@ public class Breakout extends GraphicsProgram {
 /** Pause Time */
  	private static final int PAUSE_TIME = 20;
  	
+
 /** Velocity Variables */
  	private double vx, vy;
  	
 /** Random Number Generator */
  	private RandomGenerator rgen = RandomGenerator.getInstance();
- 	
+
 /* Method: run() */
 /** Runs the Breakout program. */
 	public void run() {
@@ -90,6 +91,7 @@ public class Breakout extends GraphicsProgram {
 	}
 	
 	// This method starts the game
+
 	private void playGame() {;
 	}
 	
@@ -100,7 +102,6 @@ public class Breakout extends GraphicsProgram {
 		if (rgen.nextBoolean(0.5)) vx = -vx;
 		ball.move(vx, vy);
 	}
-	
 	
 	// This method initializes the ball in the center of the screen
 	
@@ -154,6 +155,4 @@ public class Breakout extends GraphicsProgram {
 		paddle.setFilled(true);
 		add(paddle);
 	}
-	
-	
 }
