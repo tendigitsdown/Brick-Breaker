@@ -79,20 +79,28 @@ public class Breakout extends GraphicsProgram {
 /** Runs the Breakout program. */
 	public void run() {
 		setupGame();
-		addMouseListeners();
-		playGame();
+		while (true) {
+			moveBall();
+			pause(PAUSE_TIME);
+		}
 	}
 	
-	// This method sets up the game by drawing all of the bricks on to the board
-	private void setupGame() {
-		addBricks();
-		placePaddle();
-		placeBall();
+	/** Determines if game is over */
+	
+	private boolean gameIsOver() {
+		return false;
 	}
 	
-	// This method starts the game
-
-	private void playGame() {;
+	/** moves the ball */
+	
+	private void moveBall() {
+		ball.move(vx, vy);
+		if (ball.getX() <= 0) {
+			ball.move(-vx, vy);
+		}
+		else if (ball.getX() >= WIDTH) {
+			ball.move(-vx, vy);
+		}
 	}
 	
 	// Initial Ball Drop
@@ -100,7 +108,14 @@ public class Breakout extends GraphicsProgram {
 		vy = 3.0;
 		vx = rgen.nextDouble(1.0, 3.0);
 		if (rgen.nextBoolean(0.5)) vx = -vx;
-		ball.move(vx, vy);
+	}
+	
+	// This method sets up the game by drawing all of the bricks on to the board
+	private void setupGame() {
+		addBricks();
+		placePaddle();
+		placeBall();
+		addMouseListeners();
 	}
 	
 	// This method initializes the ball in the center of the screen
