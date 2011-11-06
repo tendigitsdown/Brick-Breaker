@@ -79,16 +79,45 @@ public class Breakout extends GraphicsProgram {
 /** Runs the Breakout program. */
 	public void run() {
 		setupGame();
-		while (true) {
+		while (!gameIsOver()) {
 			moveBall();
+			checkForCollision();
 			pause(PAUSE_TIME);
 		}
+		
 	}
 	
 	/** Determines if game is over */
 	
 	private boolean gameIsOver() {
+		if (ball == null) {
+			return true;
+		}
 		return false;
+	}
+	
+	/** Check for Collisions */
+	
+	private void checkForCollision() {
+		moveOffScreen();
+		paddleCollideBall();
+	}
+	
+	private void moveOffScreen() {
+		if (ball.getY() + (2 * BALL_RADIUS) > getHeight()) {
+			ball = null;
+		}
+	}
+	
+	private void paddleCollideBall() {
+		//System.out.println(ball);
+		if (ball != null) {
+			GObject collObj = getElementAt(ball.getX() + BALL_RADIUS, ball.getY() + (2 * BALL_RADIUS));
+			System.out.println(collObj);
+			if (collObj == paddle) {
+				vy = -vy;
+			}
+		}
 	}
 	
 	/** moves the ball */
@@ -98,27 +127,29 @@ public class Breakout extends GraphicsProgram {
 		if (ball.getX() <= 0) {
 			ball.move(-vx, vy);
 		}
-		else if (ball.getX() >= WIDTH) {
+		else if (ball.getX() >= getWidth() - (2 * BALL_RADIUS)) {
 			ball.move(-vx, vy);
 		}
 	}
+
 	
-	// Initial Ball Drop
-	public void mouseClicked(MouseEvent e) {
-		vy = 3.0;
-		vx = rgen.nextDouble(1.0, 3.0);
-		if (rgen.nextBoolean(0.5)) vx = -vx;
-	}
-	
-	// This method sets up the game by drawing all of the bricks on to the board
+	/** This method sets up the game by drawing all of the bricks on to the board */
 	private void setupGame() {
 		addBricks();
 		placePaddle();
 		placeBall();
 		addMouseListeners();
+		dropBall();
 	}
 	
-	// This method initializes the ball in the center of the screen
+	/** Initial Ball Drop */
+	private void dropBall() {
+		vy = 3.0;
+		vx = rgen.nextDouble(1.0, 3.0);
+		if (rgen.nextBoolean(0.5)) vx = -vx;
+	}
+	
+	/** This method initializes the ball in the center of the screen */
 	
 	private void placeBall() {
 		ball = new GOval((WIDTH / 2) - BALL_RADIUS, (HEIGHT / 2) - BALL_RADIUS, 2 * BALL_RADIUS, 2 * BALL_RADIUS);
@@ -126,7 +157,7 @@ public class Breakout extends GraphicsProgram {
 		add(ball);
 	}
 	
-	// This method determines the movement of the paddle when the mouse is moved
+	/** This method determines the movement of the paddle when the mouse is moved */
 	public void mouseMoved(MouseEvent e) {
 		double dx = (e.getX() - paddle.getX());
 		if (e.getX() > paddle.getX()) {
@@ -137,7 +168,7 @@ public class Breakout extends GraphicsProgram {
 		}
 	}
 	
-	// Adds 10 rows of bricks to game screen
+	/** Adds 10 rows of bricks to game screen */
 	private void addBricks() {
 		newRow(Color.RED, BRICK_Y_OFFSET);
 		newRow(Color.RED, BRICK_Y_OFFSET + 1 * (BRICK_HEIGHT + BRICK_SEP));
@@ -152,7 +183,7 @@ public class Breakout extends GraphicsProgram {
 	}
 	
 	
-	// Creates a new row of bricks
+	/** Creates a new row of bricks */
 	public void newRow(Color color, int rowHeight){
 		for (int i = 0; i < NBRICKS_PER_ROW; i++) {
 			int x = BRICK_SEP + (i * (BRICK_SEP + BRICK_WIDTH));
@@ -164,7 +195,7 @@ public class Breakout extends GraphicsProgram {
 		
 	}
 	
-	// Draws paddle to the screen
+	/** Draws paddle to the screen */
 	private void placePaddle() {
 		paddle = new GRect((WIDTH / 2) - (PADDLE_WIDTH / 2), PADDLE_Y_OFFSET, PADDLE_WIDTH, PADDLE_HEIGHT);
 		paddle.setFilled(true);
